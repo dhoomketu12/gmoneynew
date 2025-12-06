@@ -1,3 +1,4 @@
+import { google } from "@ai-sdk/google";
 import { gateway } from "@ai-sdk/gateway";
 import {
   customProvider,
@@ -25,12 +26,15 @@ export const myProvider = isTestEnvironment
     })()
   : customProvider({
       languageModels: {
-        "chat-model": gateway.languageModel("google/gemini-3.0-pro-preview"),
+        "chat-model": google("gemini-3-pro-preview"),
         "chat-model-reasoning": wrapLanguageModel({
-          model: gateway.languageModel("google/gemini-3.0-pro-preview"),
+          model: google("gemini-3-pro-preview"),
           middleware: extractReasoningMiddleware({ tagName: "think" }),
         }),
-        "title-model": gateway.languageModel("google/gemini-3.0-pro-preview"),
-        "artifact-model": gateway.languageModel("google/gemini-3.0-pro-preview"),
+        "title-model": google("gemini-3-pro-preview"),
+        "artifact-model": google("gemini-3-pro-preview"),
       },
     });
+
+// Export google for use in tools
+export { google };

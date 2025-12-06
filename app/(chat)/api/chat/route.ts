@@ -21,7 +21,7 @@ import type { VisibilityType } from "@/components/visibility-selector";
 import { entitlementsByUserType } from "@/lib/ai/entitlements";
 import type { ChatModel } from "@/lib/ai/models";
 import { type RequestHints, systemPrompt } from "@/lib/ai/prompts";
-import { myProvider } from "@/lib/ai/providers";
+import { myProvider, google } from "@/lib/ai/providers";
 import { createDocument } from "@/lib/ai/tools/create-document";
 import { getWeather } from "@/lib/ai/tools/get-weather";
 import { requestSuggestions } from "@/lib/ai/tools/request-suggestions";
@@ -188,6 +188,7 @@ export async function POST(request: Request) {
             selectedChatModel === "chat-model-reasoning"
               ? []
               : [
+                  "google_search",
                   "getWeather",
                   "createDocument",
                   "updateDocument",
@@ -195,6 +196,7 @@ export async function POST(request: Request) {
                 ],
           experimental_transform: smoothStream({ chunking: "word" }),
           tools: {
+            google_search: google.tools.googleSearch([]),
             getWeather,
             createDocument: createDocument({ session, dataStream }),
             updateDocument: updateDocument({ session, dataStream }),
